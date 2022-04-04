@@ -1,4 +1,6 @@
 using Amazon.ECR;
+using Amazon.ECR.Model;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAWSService<IAmazonECR>();
 
 var app = builder.Build();
+
+app.MapGet("/GetTokens",
+    async ([FromServices] IAmazonECR awsEcr) => await awsEcr.GetAuthorizationTokenAsync(new GetAuthorizationTokenRequest()));
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
