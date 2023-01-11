@@ -30,7 +30,8 @@ return await Deployment.RunAsync(() =>
     var function = new Aws.Lambda.Function($"{nameBase}-exampleFunction", new()
     {
         Name = $"{nameBase}-exampleFunction",
-        Code = new FileArchive("lambda_function_payload.zip"),
+        // Probably want to use an S3 bucket here so that this doesn't deploy new code but it works for now
+        Code = new FileArchive(@"..\AWSSamples.Lambda.Web\bin\Release\net6.0\AWSSamples.Lambda.Web.zip"),
         Role = iamForLambda.Arn,
         Handler = "AWSSamples.Lambda.Web",
         Runtime = "dotnet6",

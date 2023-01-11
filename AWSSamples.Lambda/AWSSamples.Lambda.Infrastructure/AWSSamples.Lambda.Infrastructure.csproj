@@ -11,4 +11,8 @@
     <PackageReference Include="Pulumi.Aws" Version="5.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AWSSamples.Lambda.Web\AWSSamples.Lambda.Web.csproj" />
+  </ItemGroup>
+
 </Project>
