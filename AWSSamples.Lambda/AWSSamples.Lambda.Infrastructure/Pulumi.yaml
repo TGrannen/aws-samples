@@ -1,0 +1,3 @@
+name: aws-samples
+runtime: dotnet
+description: AWS Samples project
