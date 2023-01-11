@@ -1,4 +1,5 @@
 ﻿using Pulumi;
+using Pulumi.Aws.Lambda;
 using Aws = Pulumi.Aws;
 using S3 = Pulumi.Aws.S3;
 
@@ -184,7 +185,7 @@ internal class MyStack
 
         this.LambdaUpdateFunctionName = lambdaUpdateFunction.Name;
         this.LambdaHelloWorldFunctionName = lambdaHelloWorldFunction.Name;
-        this.LambdaHelloWorldFunctionInvokeArn = lambdaHelloWorldFunction.InvokeArn;
+        this.LambdaHelloWorldFunction = lambdaHelloWorldFunction;
         this.S3Bucket = s3Bucket.BucketName;
         this.S3Key = s3BucketObject.Key;
     }
@@ -192,7 +193,7 @@ internal class MyStack
     [Output] public Output<string> LambdaUpdateFunctionName { get; set; }
 
     [Output] public Output<string> LambdaHelloWorldFunctionName { get; set; }
-    [Output] public Output<string> LambdaHelloWorldFunctionInvokeArn { get; set; }
+    [Output] public Function LambdaHelloWorldFunction { get; set; }
 
     [Output] public Output<string> S3Bucket { get; set; }
 

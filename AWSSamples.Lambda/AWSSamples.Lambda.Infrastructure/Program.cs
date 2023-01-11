@@ -1,7 +1,6 @@
 ﻿using Pulumi;
 using System.Collections.Generic;
 using AWSSamples.Lambda.Infrastructure.Helpers;
-using Pulumi.Aws.S3;
 using Aws = Pulumi.Aws;
 
 return await Deployment.RunAsync(() =>
@@ -58,10 +57,9 @@ return await Deployment.RunAsync(() =>
         ApiId = api.Id,
         IntegrationType = "AWS_PROXY",
         ConnectionType = "INTERNET",
-        ContentHandlingStrategy = "CONVERT_TO_TEXT",
         Description = "Lambda example",
-        IntegrationMethod = "ANY",
-        IntegrationUri = myStack.LambdaHelloWorldFunctionInvokeArn,
+        IntegrationMethod = "POST",
+        IntegrationUri = myStack.LambdaHelloWorldFunction.InvokeArn,
         PassthroughBehavior = "WHEN_NO_MATCH",
     });
 
