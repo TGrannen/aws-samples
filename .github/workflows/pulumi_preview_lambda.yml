@@ -35,5 +35,8 @@ jobs:
           command: preview
           stack-name: ${{ secrets.PULUMI_ORG }}/aws-samples/lambdas
           work-dir: ./AWSSamples.Lambda/AWSSamples.Lambda.Infrastructure
+          config-map: "{
+            domain: {value: ${{ secrets.DOMAIN }}, secret: false}
+          }"
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
