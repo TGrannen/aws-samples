@@ -30,6 +30,7 @@ return await Deployment.RunAsync(() =>
     var function = new Aws.Lambda.Function($"{nameBase}-exampleFunction", new()
     {
         Name = $"{nameBase}-exampleFunction",
+        Code = new FileArchive("lambda_function_payload.zip"),
         Role = iamForLambda.Arn,
         Handler = "AWSSamples.Lambda.Web",
         Runtime = "dotnet6",
@@ -73,7 +74,7 @@ return await Deployment.RunAsync(() =>
 
     var domainName = new Aws.ApiGatewayV2.DomainName($"{nameBase}-gateway-domainname", new()
     {
-        Domain = "ws-api.example.com",
+        Domain = domain,
         DomainNameConfiguration = new Aws.ApiGatewayV2.Inputs.DomainNameDomainNameConfigurationArgs
         {
             CertificateArn = cert.Apply(c => c.Arn.ToString()),
