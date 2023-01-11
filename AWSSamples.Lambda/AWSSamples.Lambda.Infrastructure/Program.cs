@@ -1,5 +1,6 @@
 ﻿using Pulumi;
 using System.Collections.Generic;
+using AWSSamples.Lambda.Infrastructure.Helpers;
 using Pulumi.Aws.S3;
 using Aws = Pulumi.Aws;
 
@@ -8,37 +9,38 @@ return await Deployment.RunAsync(() =>
     var config = new Config();
     var domain = config.Require("domain");
     var nameBase = "aws-samples-lambda";
-
-    var iamForLambda = new Aws.Iam.Role($"{nameBase}-iamForLambda", new()
-    {
-        Name = $"{nameBase}-exampleFunction",
-        AssumeRolePolicy = @"{
-  ""Version"": ""2012-10-17"",
-  ""Statement"": [
-    {
-      ""Action"": ""sts:AssumeRole"",
-      ""Principal"": {
-        ""Service"": ""lambda.amazonaws.com""
-      },
-      ""Effect"": ""Allow"",
-      ""Sid"": """"
-    }
-  ]
-}
-",
-    });
-    
-    // Create an AWS resource (S3 Bucket)
-    var bucket = new Bucket($"{nameBase}-example-bucket");
-
-    var function = new Aws.Lambda.Function($"{nameBase}-exampleFunction", new()
-    {
-        Name = $"{nameBase}-exampleFunction",
-        S3Bucket = bucket.Arn,
-        Role = iamForLambda.Arn,
-        Handler = "AWSSamples.Lambda.Web",
-        Runtime = "dotnet6",
-    });
+    var myStack = new MyStack(nameBase, @"..\AWSSamples.Lambda.Web\bin\Release\net6.0\AWSSamples.Lambda.Web.zip");
+//
+//     var iamForLambda = new Aws.Iam.Role($"{nameBase}-iamForLambda", new()
+//     {
+//         Name = $"{nameBase}-exampleFunction",
+//         AssumeRolePolicy = @"{
+//   ""Version"": ""2012-10-17"",
+//   ""Statement"": [
+//     {
+//       ""Action"": ""sts:AssumeRole"",
+//       ""Principal"": {
+//         ""Service"": ""lambda.amazonaws.com""
+//       },
+//       ""Effect"": ""Allow"",
+//       ""Sid"": """"
+//     }
+//   ]
+// }
+// ",
+//     });
+//     
+//     // Create an AWS resource (S3 Bucket)
+//     var bucket = new Bucket($"{nameBase}-example-bucket");
+//
+//     var function = new Aws.Lambda.Function($"{nameBase}-exampleFunction", new()
+//     {
+//         Name = $"{nameBase}-exampleFunction",
+//         S3Bucket = bucket.Arn,
+//         Role = iamForLambda.Arn,
+//         Handler = "AWSSamples.Lambda.Web",
+//         Runtime = "dotnet6",
+//     });
 
     var cert = Aws.Acm.GetCertificate.Invoke(new()
     {
@@ -59,7 +61,7 @@ return await Deployment.RunAsync(() =>
         ContentHandlingStrategy = "CONVERT_TO_TEXT",
         Description = "Lambda example",
         IntegrationMethod = "ANY",
-        IntegrationUri = function.InvokeArn,
+        IntegrationUri = myStack.LambdaHelloWorldFunctionInvokeArn,
         PassthroughBehavior = "WHEN_NO_MATCH",
     });
 
