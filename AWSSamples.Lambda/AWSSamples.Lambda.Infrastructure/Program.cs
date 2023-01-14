@@ -7,6 +7,7 @@ return await Deployment.RunAsync(async () =>
     var config = new Config();
     var domain = config.Require("domain");
     var functionName = config.Require("functionName");
+    var emails = config.Require("emails");
     var nameBase = "aws-samples-lambda";
 
     var cert = Aws.Acm.GetCertificate.Invoke(new()
@@ -66,6 +67,26 @@ return await Deployment.RunAsync(async () =>
         ApiId = api.Id,
         DomainName = domainName.Id,
         Stage = stage.Id,
+    });
+    
+    var cost = new Aws.Budgets.Budget($"{nameBase}-cost", new()
+    {
+        Name = $"{nameBase}-cost",
+        BudgetType = "COST",
+        LimitAmount = "10",
+        LimitUnit = "USD",
+        TimeUnit = "MONTHLY",
+        Notifications = new []
+        {
+            new Aws.Budgets.Inputs.BudgetNotificationArgs
+            {
+                ComparisonOperator = "GREATER_THAN",
+                NotificationType = "FORECASTED",
+                SubscriberEmailAddresses = emails.Split(","),
+                Threshold = 50,
+                ThresholdType = "PERCENTAGE",
+            },
+        }
     });
 
     // Export the name of the bucket
