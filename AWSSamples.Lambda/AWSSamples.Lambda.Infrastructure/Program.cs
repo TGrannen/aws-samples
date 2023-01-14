@@ -38,7 +38,8 @@ return await Deployment.RunAsync(async () =>
 
     var stage = new Aws.ApiGatewayV2.Stage($"{nameBase}-gateway-stage", new()
     {
-        Name = $"{nameBase}-gateway-stage",
+        Name = $"$default",
+        AutoDeploy = true,
         ApiId = api.Id,
     });
 
