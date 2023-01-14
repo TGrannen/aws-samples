@@ -1,45 +1,13 @@
 ﻿using Pulumi;
 using System.Collections.Generic;
-using AWSSamples.Lambda.Infrastructure.Helpers;
 using Aws = Pulumi.Aws;
 
-return await Deployment.RunAsync(() =>
+return await Deployment.RunAsync(async () =>
 {
     var config = new Config();
     var domain = config.Require("domain");
+    var functionName = config.Require("functionName");
     var nameBase = "aws-samples-lambda";
-    var myStack = new MyStack(nameBase, @"..\AWSSamples.Lambda.Web\bin\Release\net6.0\AWSSamples.Lambda.Web.zip");
-//
-//     var iamForLambda = new Aws.Iam.Role($"{nameBase}-iamForLambda", new()
-//     {
-//         Name = $"{nameBase}-exampleFunction",
-//         AssumeRolePolicy = @"{
-//   ""Version"": ""2012-10-17"",
-//   ""Statement"": [
-//     {
-//       ""Action"": ""sts:AssumeRole"",
-//       ""Principal"": {
-//         ""Service"": ""lambda.amazonaws.com""
-//       },
-//       ""Effect"": ""Allow"",
-//       ""Sid"": """"
-//     }
-//   ]
-// }
-// ",
-//     });
-//     
-//     // Create an AWS resource (S3 Bucket)
-//     var bucket = new Bucket($"{nameBase}-example-bucket");
-//
-//     var function = new Aws.Lambda.Function($"{nameBase}-exampleFunction", new()
-//     {
-//         Name = $"{nameBase}-exampleFunction",
-//         S3Bucket = bucket.Arn,
-//         Role = iamForLambda.Arn,
-//         Handler = "AWSSamples.Lambda.Web",
-//         Runtime = "dotnet6",
-//     });
 
     var cert = Aws.Acm.GetCertificate.Invoke(new()
     {
@@ -52,20 +20,26 @@ return await Deployment.RunAsync(() =>
         ProtocolType = "HTTP",
     });
 
+    var existing = await Aws.Lambda.GetFunction.InvokeAsync(new()
+    {
+        FunctionName = functionName,
+    });
+
     var integration = new Aws.ApiGatewayV2.Integration($"{nameBase}-gateway-integration", new()
     {
         ApiId = api.Id,
         IntegrationType = "AWS_PROXY",
         ConnectionType = "INTERNET",
         Description = "Lambda example",
+        IntegrationUri = existing.InvokeArn,
         IntegrationMethod = "POST",
-        IntegrationUri = myStack.LambdaHelloWorldFunction.InvokeArn,
         PassthroughBehavior = "WHEN_NO_MATCH",
     });
 
     var stage = new Aws.ApiGatewayV2.Stage($"{nameBase}-gateway-stage", new()
     {
-        Name = $"{nameBase}-gateway-stage",
+        Name = $"$default",
+        AutoDeploy = true,
         ApiId = api.Id,
     });
 
