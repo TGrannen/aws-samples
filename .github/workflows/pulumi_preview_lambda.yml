@@ -36,6 +36,7 @@ jobs:
           stack-name: ${{ secrets.PULUMI_ORG }}/aws-samples/lambdas
           work-dir: ./AWSSamples.Lambda/AWSSamples.Lambda.Infrastructure
           config-map: "{
+            functionName: {value: aws-samples-test-function, secret: false},
             domain: {value: ${{ secrets.DOMAIN }}, secret: false}
           }"
         env:

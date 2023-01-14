@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Aws = Pulumi.Aws;
 
-return await Deployment.RunAsync(() =>
+return await Deployment.RunAsync(async () =>
 {
     var config = new Config();
     var domain = config.Require("domain");
+    var functionName = config.Require("functionName");
     var nameBase = "aws-samples-lambda";
 
     var cert = Aws.Acm.GetCertificate.Invoke(new()
@@ -19,16 +20,21 @@ return await Deployment.RunAsync(() =>
         ProtocolType = "HTTP",
     });
 
-    // var integration = new Aws.ApiGatewayV2.Integration($"{nameBase}-gateway-integration", new()
-    // {
-    //     ApiId = api.Id,
-    //     IntegrationType = "AWS_PROXY",
-    //     ConnectionType = "INTERNET",
-    //     Description = "Lambda example",
-    //     IntegrationUri = myStack.LambdaHelloWorldFunction.InvokeArn,
-    //     IntegrationMethod = "POST",
-    //     PassthroughBehavior = "WHEN_NO_MATCH",
-    // });
+    var existing = await Aws.Lambda.GetFunction.InvokeAsync(new()
+    {
+        FunctionName = functionName,
+    });
+
+    var integration = new Aws.ApiGatewayV2.Integration($"{nameBase}-gateway-integration", new()
+    {
+        ApiId = api.Id,
+        IntegrationType = "AWS_PROXY",
+        ConnectionType = "INTERNET",
+        Description = "Lambda example",
+        IntegrationUri = existing.InvokeArn,
+        IntegrationMethod = "POST",
+        PassthroughBehavior = "WHEN_NO_MATCH",
+    });
 
     var stage = new Aws.ApiGatewayV2.Stage($"{nameBase}-gateway-stage", new()
     {
@@ -36,12 +42,12 @@ return await Deployment.RunAsync(() =>
         ApiId = api.Id,
     });
 
-    // var route = new Aws.ApiGatewayV2.Route($"{nameBase}-gateway-route", new()
-    // {
-    //     ApiId = api.Id,
-    //     RouteKey = "$default",
-    //     Target = integration.Id.Apply(id => $"integrations/{id}")
-    // });
+    var route = new Aws.ApiGatewayV2.Route($"{nameBase}-gateway-route", new()
+    {
+        ApiId = api.Id,
+        RouteKey = "$default",
+        Target = integration.Id.Apply(id => $"integrations/{id}")
+    });
 
     var domainName = new Aws.ApiGatewayV2.DomainName($"{nameBase}-gateway-domainname", new()
     {
