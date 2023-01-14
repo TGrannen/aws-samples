@@ -57,4 +57,4 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Deploy Function to AWS
-        run: dotnet lambda deploy-function aws-samples-test-function --function-role iam_for_lambda --environment "Variables={ASPNETCORE_ENVIRONMENT=Development}"
+        run: dotnet lambda deploy-function aws-samples-test-function --function-role iam_for_lambda -ev ASPNETCORE_ENVIRONMENT=Development
