@@ -1,5 +1,6 @@
 ﻿using Pulumi;
 using System.Collections.Generic;
+using Pulumi.Aws.Lambda;
 using Aws = Pulumi.Aws;
 
 return await Deployment.RunAsync(async () =>
@@ -35,6 +36,7 @@ return await Deployment.RunAsync(async () =>
         IntegrationUri = existing.InvokeArn,
         IntegrationMethod = "POST",
         PassthroughBehavior = "WHEN_NO_MATCH",
+        PayloadFormatVersion = "2.0"
     });
 
     var stage = new Aws.ApiGatewayV2.Stage($"{nameBase}-gateway-stage", new()
@@ -68,7 +70,16 @@ return await Deployment.RunAsync(async () =>
         DomainName = domainName.Id,
         Stage = stage.Id,
     });
-    
+
+    var permission = new Permission($"{nameBase}-func-permission", new PermissionArgs
+    {
+        Action = "lambda:InvokeFunction",
+        Principal = "apigateway.amazonaws.com",
+        StatementIdPrefix = nameBase,
+        SourceArn = api.ExecutionArn.Apply(executionArn => $"{executionArn}/*/$default"),
+        Function = functionName
+    });
+
     var cost = new Aws.Budgets.Budget($"{nameBase}-cost", new()
     {
         Name = $"{nameBase}-cost",
@@ -76,7 +87,7 @@ return await Deployment.RunAsync(async () =>
         LimitAmount = "10",
         LimitUnit = "USD",
         TimeUnit = "MONTHLY",
-        Notifications = new []
+        Notifications = new[]
         {
             new Aws.Budgets.Inputs.BudgetNotificationArgs
             {
@@ -84,6 +95,22 @@ return await Deployment.RunAsync(async () =>
                 NotificationType = "FORECASTED",
                 SubscriberEmailAddresses = emails.Split(","),
                 Threshold = 50,
+                ThresholdType = "PERCENTAGE",
+            },
+            new Aws.Budgets.Inputs.BudgetNotificationArgs
+            {
+                ComparisonOperator = "GREATER_THAN",
+                NotificationType = "ACTUAL",
+                SubscriberEmailAddresses = emails.Split(","),
+                Threshold = 50,
+                ThresholdType = "PERCENTAGE",
+            },  
+            new Aws.Budgets.Inputs.BudgetNotificationArgs
+            {
+                ComparisonOperator = "GREATER_THAN",
+                NotificationType = "ACTUAL",
+                SubscriberEmailAddresses = emails.Split(","),
+                Threshold = 80,
                 ThresholdType = "PERCENTAGE",
             },
         }
