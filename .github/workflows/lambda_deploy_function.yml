@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - feature/*
     paths:
       - 'AWSSamples.Lambda/AWSSamples.Lambda.Web/**'
       - '.github/workflows/lambda_deploy_function.yml'
