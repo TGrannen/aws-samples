@@ -29,6 +29,7 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore
+
   #         TODO: Write some example tests
   #      - name: Test
   #        run: dotnet test --no-build --verbosity normal
@@ -56,5 +57,5 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Deploy
-        run: dotnet lambda deploy-function
+      - name: Deploy Function to AWS
+        run: dotnet lambda deploy-function aws-samples-test-function --function-role aws-samples-test-role
