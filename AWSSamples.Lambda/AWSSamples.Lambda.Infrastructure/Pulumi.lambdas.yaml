@@ -1,3 +1,4 @@
 config:
+  aws-samples:domain: lambda.aws-samples.grannendev.com
   aws:region: us-east-2
   pulumi:template: aws-csharp
