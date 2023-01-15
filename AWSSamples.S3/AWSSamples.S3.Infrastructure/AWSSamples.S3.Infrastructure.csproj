@@ -12,4 +12,10 @@
     <PackageReference Include="Pulumi.Aws" Version="5.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="policy.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
