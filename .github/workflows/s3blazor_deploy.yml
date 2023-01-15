@@ -49,4 +49,4 @@ jobs:
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.AWS_S3_DISTRIBUTION }}
-          PATHS: "/index.html"
+          PATHS: "/*"
