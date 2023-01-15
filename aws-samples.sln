@@ -18,6 +18,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWSSamples.Lambda.Web", "AW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWSSamples.Lambda.Infrastructure", "AWSSamples.Lambda\AWSSamples.Lambda.Infrastructure\AWSSamples.Lambda.Infrastructure.csproj", "{030B6BE8-4807-4226-B411-27DD4D1CE15B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "S3-Blazor", "S3-Blazor", "{64807C2B-BD4A-48E6-859A-F7D67955E5B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWSSamples.S3.BlazorWasm", "AWSSamples.S3\AWSSamples.S3.BlazorWasm\AWSSamples.S3.BlazorWasm.csproj", "{2AAFDCDC-E40B-4C8F-9129-531B838CDEFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWSSamples.S3.Infrastructure", "AWSSamples.S3\AWSSamples.S3.Infrastructure\AWSSamples.S3.Infrastructure.csproj", "{3A2DB145-DA51-404D-B25C-B31A754A347D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,9 +50,19 @@ Global
 		{030B6BE8-4807-4226-B411-27DD4D1CE15B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{030B6BE8-4807-4226-B411-27DD4D1CE15B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{030B6BE8-4807-4226-B411-27DD4D1CE15B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AAFDCDC-E40B-4C8F-9129-531B838CDEFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AAFDCDC-E40B-4C8F-9129-531B838CDEFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AAFDCDC-E40B-4C8F-9129-531B838CDEFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AAFDCDC-E40B-4C8F-9129-531B838CDEFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A2DB145-DA51-404D-B25C-B31A754A347D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A2DB145-DA51-404D-B25C-B31A754A347D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A2DB145-DA51-404D-B25C-B31A754A347D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A2DB145-DA51-404D-B25C-B31A754A347D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{864EB64D-9D59-43CD-A8A9-FD0C1A7DB112} = {98FA98E0-9F36-4308-B224-79299945346A}
 		{030B6BE8-4807-4226-B411-27DD4D1CE15B} = {98FA98E0-9F36-4308-B224-79299945346A}
+		{2AAFDCDC-E40B-4C8F-9129-531B838CDEFE} = {64807C2B-BD4A-48E6-859A-F7D67955E5B9}
+		{3A2DB145-DA51-404D-B25C-B31A754A347D} = {64807C2B-BD4A-48E6-859A-F7D67955E5B9}
 	EndGlobalSection
 EndGlobal

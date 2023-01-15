@@ -1,4 +1,4 @@
-name: Pulumi - Lambda
+name: Pulumi - S3 Blazor
 
 on:
   workflow_dispatch:
@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      - 'AWSSamples.Lambda/AWSSamples.Lambda.Infrastructure/**'
-      - '.github/workflows/pulumi_deployment_lambda.yml'
+      - 'AWSSamples.S3/AWSSamples.S3.Infrastructure/**'
+      - '.github/workflows/pulumi_deployment_s3blazor.yml'
 
 jobs:
   deploy:
@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: 7.0.x  
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -29,10 +29,9 @@ jobs:
       - uses: pulumi/actions@v3
         with:
           command: up
-          stack-name: ${{ secrets.PULUMI_ORG }}/aws-samples/lambdas
-          work-dir: ./AWSSamples.Lambda/AWSSamples.Lambda.Infrastructure
+          stack-name: ${{ secrets.PULUMI_ORG }}/aws-samples/s3-blazor
+          work-dir: ./AWSSamples.S3/AWSSamples.S3.Infrastructure
           config-map: "{
-            functionName: {value: aws-samples-test-function, secret: false},
             emails: {value: ${{ secrets.BUDGET_EMAILS }}, secret: false},
             domain: {value: ${{ secrets.DOMAIN }}, secret: false},
           }"
