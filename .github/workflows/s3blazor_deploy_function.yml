@@ -43,4 +43,4 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Deploy static site to S3 bucket
-        run: aws s3 sync ./public/ s3://BUCKET_NAME --delete
+        run: aws s3 sync ./public/ s3://aws-samples-s3-blazor-bucket --delete
