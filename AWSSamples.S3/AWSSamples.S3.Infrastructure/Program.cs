@@ -36,13 +36,13 @@ return await Deployment.RunAsync(async () =>
         }
     });
 
-    var cert = GetCertificate.Invoke(new GetCertificateInvokeArgs
-    {
-        Domain = domain,
-    }, new InvokeOptions
-    {
-        Provider = new Aws.Provider("us-east-1-provider", new Aws.ProviderArgs { Region = "us-east-1" })
-    });
+    // var cert = GetCertificate.Invoke(new GetCertificateInvokeArgs
+    // {
+    //     Domain = domain,
+    // }, new InvokeOptions
+    // {
+    //     Provider = new Aws.Provider("us-east-1-provider", new Aws.ProviderArgs { Region = "us-east-1" })
+    // });
 
     var s3OriginId = "s3-blazor-origin";
 
@@ -66,10 +66,10 @@ return await Deployment.RunAsync(async () =>
         //     Bucket = "mylogs.s3.amazonaws.com",
         //     Prefix = "myprefix",
         // },
-        Aliases = new[]
-        {
-            domain
-        },
+        // Aliases = new[]
+        // {
+        //     domain
+        // },
         DefaultCacheBehavior = new Aws.CloudFront.Inputs.DistributionDefaultCacheBehaviorArgs
         {
             AllowedMethods = new[]
