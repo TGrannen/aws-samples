@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - 'AWSSamples.S3/AWSSamples.S3.BlazorWasm/**'
-      - '.github/workflows/s3blazor_deploy_function.yml'
+      - '.github/workflows/s3blazor_deploy.yml'
 
 jobs:
   deploy:
